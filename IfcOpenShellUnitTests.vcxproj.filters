@@ -15,10 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="IfcOpenShellUnitTests.cpp">
+    <ClCompile Include="FHWA_Bridge_Geometry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ACCA_Sleepers_Linear_Placement_Cant.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
