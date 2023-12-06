@@ -65,6 +65,10 @@ namespace IfcOpenShellUnitTests
 				auto m = ifcopenshell::geometry::taxonomy::cast<ifcopenshell::geometry::taxonomy::matrix4>(mapping->map(placement));
 				m->components().col(3).head(3) /= mapping->get_length_unit();
 
+				auto d = m->ccomponents().determinant();
+				Assert::AreEqual(1.0, d, 0.0000001);
+
+
 				auto x = m->ccomponents().col(3)(0);
 				auto y = m->ccomponents().col(3)(1);
 				auto z = m->ccomponents().col(3)(2);
@@ -82,6 +86,9 @@ namespace IfcOpenShellUnitTests
 
 				auto m = ifcopenshell::geometry::taxonomy::cast<ifcopenshell::geometry::taxonomy::matrix4>(mapping->map(placement));
 				m->components().col(3).head(3) /= mapping->get_length_unit();
+
+				auto d = m->ccomponents().determinant();
+				Assert::AreEqual(1.0, d, 0.0000001);
 
 				auto x = m->ccomponents().col(3)(0);
 				auto y = m->ccomponents().col(3)(1);
@@ -149,6 +156,9 @@ namespace IfcOpenShellUnitTests
 				auto m = ifcopenshell::geometry::taxonomy::cast<ifcopenshell::geometry::taxonomy::matrix4>(mapping->map(object_placement));
 				m->components().col(3).head(3) /= mapping->get_length_unit();
 
+				auto d = m->ccomponents().determinant();
+				Assert::AreEqual(1.0, d, 0.0000001);
+
 				auto dx = m->ccomponents().col(0)(0);
 				auto dy = m->ccomponents().col(0)(1);
 				auto dz = m->ccomponents().col(0)(2);
@@ -156,9 +166,9 @@ namespace IfcOpenShellUnitTests
 				auto slope = dz / sqrt(dx * dx + dy * dy);
 				auto elev = m->ccomponents().col(3)(2);
 
-				double d = *object_placement->as<Schema::IfcLinearPlacement>()->RelativePlacement()->as<Schema::IfcAxis2PlacementLinear>()->Location()->as<Schema::IfcPointByDistanceExpression>()->DistanceAlong()->as<Schema::IfcNonNegativeLengthMeasure>();
+				double dist = *object_placement->as<Schema::IfcLinearPlacement>()->RelativePlacement()->as<Schema::IfcAxis2PlacementLinear>()->Location()->as<Schema::IfcPointByDistanceExpression>()->DistanceAlong()->as<Schema::IfcNonNegativeLengthMeasure>();
 
-				Assert::AreEqual(std::get<0>(expected_values[i]), d - 1200.0, 0.001);
+				Assert::AreEqual(std::get<0>(expected_values[i]), dist - 1200.0, 0.001);
 				Assert::AreEqual(std::get<1>(expected_values[i]), elev, 0.001);
 				Assert::AreEqual(std::get<2>(expected_values[i]), slope, 0.00001);
 
