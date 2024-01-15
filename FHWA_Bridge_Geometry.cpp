@@ -31,7 +31,7 @@ namespace IfcOpenShellUnitTests
 			// Example 5.1, Point at 110+00
 			{
 				auto pde = new Schema::IfcPointByDistanceExpression(
-					new Schema::IfcNonNegativeLengthMeasure(1000.),
+					new Schema::IfcLengthMeasure(1000.),
 					boost::none, boost::none, boost::none,
 					curve);
 
@@ -43,7 +43,7 @@ namespace IfcOpenShellUnitTests
 			// Example 5.2, Point at 145+00
 			{
 				auto pde = new Schema::IfcPointByDistanceExpression(
-					new Schema::IfcNonNegativeLengthMeasure(4500.),
+					new Schema::IfcLengthMeasure(4500.),
 					boost::none, boost::none, boost::none,
 					curve);
 
@@ -55,7 +55,7 @@ namespace IfcOpenShellUnitTests
 			// Example 5.3, Point at 145+00, 20 ft left
 			{
 				auto pde = new Schema::IfcPointByDistanceExpression(
-					new Schema::IfcNonNegativeLengthMeasure(4500.),
+					new Schema::IfcLengthMeasure(4500.),
 					20.0, boost::none, boost::none,
 					curve);
 
@@ -67,7 +67,7 @@ namespace IfcOpenShellUnitTests
 			// Example 5.3, Point at 145+00, 20 ft right
 			{
 				auto pde = new Schema::IfcPointByDistanceExpression(
-					new Schema::IfcNonNegativeLengthMeasure(4500.),
+					new Schema::IfcLengthMeasure(4500.),
 					-20.0, boost::none, boost::none,
 					curve);
 
@@ -80,7 +80,7 @@ namespace IfcOpenShellUnitTests
 			// Distance from start is 3000 ft
 			{
 				auto pde = new Schema::IfcPointByDistanceExpression(
-					new Schema::IfcNonNegativeLengthMeasure(3000.),
+					new Schema::IfcLengthMeasure(3000.),
 					boost::none, boost::none, boost::none,
 					curve);
 
@@ -92,7 +92,7 @@ namespace IfcOpenShellUnitTests
 			// Example 5.8, offset 10 ft right
 			{
 				auto pde = new Schema::IfcPointByDistanceExpression(
-					new Schema::IfcNonNegativeLengthMeasure(3000.),
+					new Schema::IfcLengthMeasure(3000.),
 					-10.0, boost::none, boost::none,
 					curve);
 
@@ -265,7 +265,7 @@ namespace IfcOpenShellUnitTests
 				auto station = std::get<0>(ev);
 				auto dist = station - start_station;
 				auto pde = new Schema::IfcPointByDistanceExpression(
-					new Schema::IfcNonNegativeLengthMeasure(dist),
+					new Schema::IfcLengthMeasure(dist),
 					boost::none, boost::none, boost::none,
 					gradient_curve);
 
@@ -301,7 +301,7 @@ namespace IfcOpenShellUnitTests
 				auto y = m->ccomponents().col(3)(1);
 				auto z = m->ccomponents().col(3)(2);
 
-				double dist = *object_placement->as<Schema::IfcLinearPlacement>()->RelativePlacement()->as<Schema::IfcAxis2PlacementLinear>()->Location()->as<Schema::IfcPointByDistanceExpression>()->DistanceAlong()->as<Schema::IfcNonNegativeLengthMeasure>();
+				double dist = *object_placement->as<Schema::IfcLinearPlacement>()->RelativePlacement()->as<Schema::IfcAxis2PlacementLinear>()->Location()->as<Schema::IfcPointByDistanceExpression>()->DistanceAlong()->as<Schema::IfcLengthMeasure>();
 
 				Assert::AreEqual(std::get<0>(expected_values[i]), dist+start_station, 0.001);
 				Assert::AreEqual(std::get<1>(expected_values[i]), x, 0.01);
@@ -329,7 +329,7 @@ namespace IfcOpenShellUnitTests
 			{
 				double dist = 1200. + i * 1600.0 / 10;
 				auto pde = new Schema::IfcPointByDistanceExpression(
-					new Schema::IfcNonNegativeLengthMeasure(dist),
+					new Schema::IfcLengthMeasure(dist),
 					boost::none, boost::none, boost::none,
 					gradient_curve);
 
@@ -378,7 +378,7 @@ namespace IfcOpenShellUnitTests
 				auto slope = dz / sqrt(dx * dx + dy * dy);
 				auto elev = m->ccomponents().col(3)(2);
 
-				double dist = *object_placement->as<Schema::IfcLinearPlacement>()->RelativePlacement()->as<Schema::IfcAxis2PlacementLinear>()->Location()->as<Schema::IfcPointByDistanceExpression>()->DistanceAlong()->as<Schema::IfcNonNegativeLengthMeasure>();
+				double dist = *object_placement->as<Schema::IfcLinearPlacement>()->RelativePlacement()->as<Schema::IfcAxis2PlacementLinear>()->Location()->as<Schema::IfcPointByDistanceExpression>()->DistanceAlong()->as<Schema::IfcLengthMeasure>();
 
 				Assert::AreEqual(std::get<0>(expected_values[i]), dist - 1200.0, 0.001);
 				Assert::AreEqual(std::get<1>(expected_values[i]), elev, 0.001);

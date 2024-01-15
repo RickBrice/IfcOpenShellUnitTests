@@ -24,6 +24,9 @@
     <ClCompile Include="ACCA_Sleepers_Linear_Placement_Cant.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Test_IfcLinearPlacement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">

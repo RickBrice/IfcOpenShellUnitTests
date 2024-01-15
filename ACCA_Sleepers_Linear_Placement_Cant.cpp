@@ -29,7 +29,7 @@ namespace IfcOpenShellUnitTests
 			auto segmented_ref_curve = *segmented_ref_curves->begin();
 
 			auto pde = new Schema::IfcPointByDistanceExpression(
-				new Schema::IfcNonNegativeLengthMeasure(425.0),
+				new Schema::IfcLengthMeasure(425.0),
 				boost::none, boost::none, boost::none,
 				segmented_ref_curve);
 
