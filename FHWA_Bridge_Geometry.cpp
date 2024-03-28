@@ -232,6 +232,19 @@ namespace IfcOpenShellUnitTests
 				Assert::AreEqual(3141.8862, x, 0.001);
 				Assert::AreEqual(1374.0192, y, 0.001);
 				Assert::AreEqual(0.0, z, 0.001);
+
+				//auto lp = placement->as<Schema::IfcLinearPlacement>();
+				//auto rp = lp->RelativePlacement();
+				//auto pl = rp->as<Schema::IfcAxis2PlacementLinear>();
+				//auto loc = pl->Location();
+				//auto pde = loc->as<Schema::IfcPointByDistanceExpression>();
+				//pde->setDistanceAlong(new Schema::IfcLengthMeasure(4000.));
+				//m = ifcopenshell::geometry::taxonomy::cast<ifcopenshell::geometry::taxonomy::matrix4>(mapping->map(placement));
+				//m->components().col(3).head(3) /= mapping->get_length_unit();
+				//x = m->ccomponents().col(3)(0);
+				//y = m->ccomponents().col(3)(1);
+				//z = m->ccomponents().col(3)(2);
+
 			}
 		}
 

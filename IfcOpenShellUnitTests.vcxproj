@@ -162,6 +162,9 @@
   <ItemGroup>
     <ClCompile Include="ACCA_Sleepers_Linear_Placement_Cant.cpp" />
     <ClCompile Include="FHWA_Bridge_Geometry.cpp" />
+    <ClCompile Include="RailRoomTests_Cant.cpp" />
+    <ClCompile Include="RailRoomTests_Horizontal.cpp" />
+    <ClCompile Include="RailRoomTests_Vertical.cpp" />
     <ClCompile Include="Test_IfcLinearPlacement.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

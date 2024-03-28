@@ -15,7 +15,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 #define Schema Ifc4x3_add2
 
-void setup_project(IfcHierarchyHelper<Schema>& file)
+static void setup_project(IfcHierarchyHelper<Schema>& file)
 {
 	auto project = file.addProject();
 	project->setName(std::string("TestProject"));

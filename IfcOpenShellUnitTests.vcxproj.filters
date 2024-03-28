@@ -27,6 +27,15 @@
     <ClCompile Include="Test_IfcLinearPlacement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RailRoomTests_Horizontal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RailRoomTests_Vertical.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RailRoomTests_Cant.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
