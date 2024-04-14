@@ -45,11 +45,13 @@ namespace IfcRailRoom
 			std::getline(ifile, str);
 
 			double tol = 0.0001;
+			double s;
 			while (ifile)
 			{
 				int i;
 				double ex, ez, es;
 				ifile >> i >> es >> ex >> ez;
+				s = es;
 				auto m = ifcopenshell::geometry::taxonomy::make<ifcopenshell::geometry::taxonomy::matrix4>(pwf->evaluate(es));
 				m->components().col(3).head(3) /= mapping->get_length_unit();
 				Eigen::Matrix4d values = m->components();
@@ -60,6 +62,21 @@ namespace IfcRailRoom
 				Assert::AreEqual(es, x, tol);
 				//Assert::AreEqual(ey, y, tol);
 				Assert::AreEqual(ez, z, tol);
+			}
+
+			// validate the ending placement including the vectors
+			auto placement = curve->EndPoint();
+			Assert::IsNotNull(placement, _T("IfcAxis2Placement3D not found"));
+			auto m1 = ifcopenshell::geometry::taxonomy::dcast<ifcopenshell::geometry::taxonomy::matrix4>(mapping->map(placement))->components();
+			auto m2 = ifcopenshell::geometry::taxonomy::make<ifcopenshell::geometry::taxonomy::matrix4>(pwf->evaluate(s))->components();
+			for (int i = 0; i < 4; i++)
+			{
+				for (int j = 0; j < 4; j++)
+				{
+					std::wostringstream os;
+					os << _T("(") << i << _T(", ") << j << _T(")");
+					Assert::AreEqual(m1(i, j), m2(i, j), tol, os.str().c_str());
+				}
 			}
 		}
 

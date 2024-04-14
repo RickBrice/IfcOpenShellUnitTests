@@ -45,12 +45,13 @@ namespace IfcRailRoom
 			std::getline(ifile, str);
 
 			double tol = 0.0001;
+			double s;
 			while (ifile)
 			{
 				double es, ex, ey;
 				ifile >> es >> ex >> ey;
 
-				double s = (curve_type == "Cubic") ? ex : es;
+				s = (curve_type == "Cubic") ? ex : es;
 				auto m = ifcopenshell::geometry::taxonomy::make<ifcopenshell::geometry::taxonomy::matrix4>(pwf->evaluate(s));
 
 				m->components().col(3).head(3) /= mapping->get_length_unit();
@@ -60,6 +61,25 @@ namespace IfcRailRoom
 				double y = values(1, 3);
 				Assert::AreEqual(ex, x, tol);
 				Assert::AreEqual(ey, y, tol);
+			}
+
+
+			// validate the ending placement including the vectors
+			auto nSegments = curve->Segments()->size();
+			auto segments = curve->Segments();
+			auto it = segments->begin() + nSegments - 1;
+			auto placement = (*it)->as<Ifc4x3_add2::IfcCurveSegment>()->Placement();
+			Assert::IsNotNull(placement, _T("IfcAxis2Placement3D not found"));
+			auto m1 = ifcopenshell::geometry::taxonomy::dcast<ifcopenshell::geometry::taxonomy::matrix4>(mapping->map(placement))->components();
+			auto m2 = ifcopenshell::geometry::taxonomy::make<ifcopenshell::geometry::taxonomy::matrix4>(pwf->evaluate(s))->components();
+			for (int i = 0; i < 4; i++)
+			{
+				for (int j = 0; j < 4; j++)
+				{
+					std::wostringstream os;
+					os << _T("(") << i << _T(", ") << j << _T(")");
+					Assert::AreEqual(m1(i, j), m2(i, j), tol, os.str().c_str());
+				}
 			}
 		}
 

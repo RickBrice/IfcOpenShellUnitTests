@@ -44,7 +44,8 @@ namespace IfcRailRoom
 			std::getline(ifile, str);
 			std::getline(ifile, str);
 
-			double tol = 0.0001;
+			double tol = 0.00001;
+			double s; // so we have the last value after the loop
 			while (ifile)
 			{
 				double es, ex, ey, ez;
@@ -53,7 +54,7 @@ namespace IfcRailRoom
 
 				if (ifile.fail()) break;
 
-				double s = std::stod(ee.substr(1, ee.size() - 2));
+				s = std::stod(ee.substr(1, ee.size() - 2));
 
 				//double s = (curve_type == "Cubic") ? ex : es;
 				auto m = ifcopenshell::geometry::taxonomy::make<ifcopenshell::geometry::taxonomy::matrix4>(pwf->evaluate(s));
@@ -67,6 +68,21 @@ namespace IfcRailRoom
 				Assert::AreEqual(ex, x, tol);
 				Assert::AreEqual(ey, y, tol);
 				Assert::AreEqual(ez, z, tol);
+			}
+
+			// validate the ending placement including the vectors
+			auto placement = curve->EndPoint();
+			Assert::IsNotNull(placement, _T("IfcAxis2Placement3D not found"));
+			auto m1 = ifcopenshell::geometry::taxonomy::dcast<ifcopenshell::geometry::taxonomy::matrix4>(mapping->map(placement))->components();
+			auto m2 = ifcopenshell::geometry::taxonomy::make<ifcopenshell::geometry::taxonomy::matrix4>(pwf->evaluate(s))->components();
+			for (int i = 0; i < 4; i++)
+			{
+				for (int j = 0; j < 4; j++)
+				{
+					std::wostringstream os;
+					os << _T("(") << i << _T(", ") << j << _T(")");
+					Assert::AreEqual(m1(i, j), m2(i, j), tol, os.str().c_str());
+				}
 			}
 		}
 
