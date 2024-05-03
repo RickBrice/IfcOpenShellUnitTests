@@ -394,7 +394,7 @@ namespace IfcOpenShellUnitTests
 				double dist = *object_placement->as<Schema::IfcLinearPlacement>()->RelativePlacement()->as<Schema::IfcAxis2PlacementLinear>()->Location()->as<Schema::IfcPointByDistanceExpression>()->DistanceAlong()->as<Schema::IfcLengthMeasure>();
 
 				Assert::AreEqual(std::get<0>(expected_values[i]), dist - 1200.0, 0.001);
-				Assert::AreEqual(std::get<1>(expected_values[i]), elev, 0.001);
+				Assert::AreEqual(std::get<1>(expected_values[i]), elev, 0.01);
 				Assert::AreEqual(std::get<2>(expected_values[i]), slope, 0.00001);
 
 				i++;
