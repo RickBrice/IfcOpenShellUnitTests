@@ -8,6 +8,7 @@
 #include <ifcparse/IfcHierarchyHelper.h>
 #include <ifcparse/Ifc4x3_add2.h>
 #include <ifcgeom/abstract_mapping.h>
+#include <ifcgeom/piecewise_function_evaluator.h>
 
 #include <fstream>
 
@@ -36,6 +37,7 @@ namespace IfcRailRoom
 			auto mapping = ifcopenshell::geometry::impl::mapping_implementations().construct(&file, settings);
 
 			auto pwf = ifcopenshell::geometry::taxonomy::cast<ifcopenshell::geometry::taxonomy::piecewise_function>(mapping->map(curve));
+			auto evaluator = ifcopenshell::geometry::piecewise_function_evaluator(pwf);
 
 			std::ostringstream os2;
 			os2 << "F:/IFC-Rail-Unit-Test-Reference-Code/alignment_testset/ToolboxProcess-C/CantAlignment/" << curve_type.c_str() << "/" << curve_type.c_str() << test_name << "-2CS.txt";
@@ -57,7 +59,7 @@ namespace IfcRailRoom
 				s = std::stod(ee.substr(1, ee.size() - 2));
 
 				//double s = (curve_type == "Cubic") ? ex : es;
-				auto m = ifcopenshell::geometry::taxonomy::make<ifcopenshell::geometry::taxonomy::matrix4>(pwf->evaluate(s));
+				auto m = ifcopenshell::geometry::taxonomy::make<ifcopenshell::geometry::taxonomy::matrix4>(evaluator.evaluate(s));
 
 				m->components().col(3).head(3) /= mapping->get_length_unit();
 				Eigen::Matrix4d values = m->components();
@@ -74,7 +76,7 @@ namespace IfcRailRoom
 			auto placement = curve->EndPoint();
 			Assert::IsNotNull(placement, _T("IfcAxis2Placement3D not found"));
 			auto m1 = ifcopenshell::geometry::taxonomy::dcast<ifcopenshell::geometry::taxonomy::matrix4>(mapping->map(placement))->components();
-			auto m2 = ifcopenshell::geometry::taxonomy::make<ifcopenshell::geometry::taxonomy::matrix4>(pwf->evaluate(s))->components();
+			auto m2 = ifcopenshell::geometry::taxonomy::make<ifcopenshell::geometry::taxonomy::matrix4>(evaluator.evaluate(s))->components();
 			//for (int i = 0; i < 4; i++)
 			//{
 			//	for (int j = 0; j < 4; j++)

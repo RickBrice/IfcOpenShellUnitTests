@@ -8,6 +8,7 @@
 #include <ifcparse/IfcHierarchyHelper.h>
 #include <ifcparse/Ifc4x3_add2.h>
 #include <ifcgeom/abstract_mapping.h>
+#include <ifcgeom/piecewise_function_evaluator.h>
 
 #include <fstream>
 
@@ -44,6 +45,8 @@ namespace IfcRailRoom
 			std::getline(ifile, str);
 			std::getline(ifile, str);
 
+			auto evaluator = ifcopenshell::geometry::piecewise_function_evaluator(pwf);
+
 			double tol = 0.001;
 			double s;
 			while (ifile)
@@ -52,7 +55,7 @@ namespace IfcRailRoom
 				ifile >> es >> ex >> ey;
 
 				s = (curve_type == "Cubic") ? ex : es;
-				auto m = ifcopenshell::geometry::taxonomy::make<ifcopenshell::geometry::taxonomy::matrix4>(pwf->evaluate(s));
+				auto m = ifcopenshell::geometry::taxonomy::make<ifcopenshell::geometry::taxonomy::matrix4>(evaluator.evaluate(s));
 
 				m->components().col(3).head(3) /= mapping->get_length_unit();
 				Eigen::Matrix4d values = m->components();
@@ -71,7 +74,7 @@ namespace IfcRailRoom
 			auto placement = (*it)->as<Ifc4x3_add2::IfcCurveSegment>()->Placement();
 			Assert::IsNotNull(placement, _T("IfcAxis2Placement3D not found"));
 			auto m1 = ifcopenshell::geometry::taxonomy::dcast<ifcopenshell::geometry::taxonomy::matrix4>(mapping->map(placement))->components();
-			auto m2 = ifcopenshell::geometry::taxonomy::make<ifcopenshell::geometry::taxonomy::matrix4>(pwf->evaluate(s))->components();
+			auto m2 = ifcopenshell::geometry::taxonomy::make<ifcopenshell::geometry::taxonomy::matrix4>(evaluator.evaluate(s))->components();
 			//for (int i = 0; i < 4; i++)
 			//{
 			//	// the unit test files use a zero length segment with a direction of (1,0) which is not the same gradient
