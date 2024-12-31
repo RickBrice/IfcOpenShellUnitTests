@@ -8,7 +8,7 @@
 #include <ifcparse/IfcHierarchyHelper.h>
 #include <ifcparse/Ifc4x3_add2.h>
 #include <ifcgeom/abstract_mapping.h>
-#include <ifcgeom/piecewise_function_evaluator.h>
+#include <ifcgeom/function_item_evaluator.h>
 
 #include <fstream>
 
@@ -36,8 +36,9 @@ namespace IfcRailRoom
 			ifcopenshell::geometry::Settings settings;
 			auto mapping = ifcopenshell::geometry::impl::mapping_implementations().construct(&file, settings);
 
-			auto pwf = ifcopenshell::geometry::taxonomy::cast<ifcopenshell::geometry::taxonomy::piecewise_function>(mapping->map(curve));
-			auto evaluator = ifcopenshell::geometry::piecewise_function_evaluator(pwf);
+			auto fn = ifcopenshell::geometry::taxonomy::cast<ifcopenshell::geometry::taxonomy::function_item>(mapping->map(curve));
+			ifcopenshell::geometry::function_item_evaluator evaluator(settings,fn);
+
 
 			std::ostringstream os2;
 			os2 << "F:/IFC-Rail-Unit-Test-Reference-Code/alignment_testset/ToolboxProcess-C/CantAlignment/" << curve_type.c_str() << "/" << curve_type.c_str() << test_name << "-2CS.txt";

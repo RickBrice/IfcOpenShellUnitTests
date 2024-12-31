@@ -8,7 +8,7 @@
 #include <ifcparse/IfcHierarchyHelper.h>
 #include <ifcparse/Ifc4x3_add2.h>
 #include <ifcgeom/abstract_mapping.h>
-#include <ifcgeom/piecewise_function_evaluator.h>
+#include <ifcgeom/function_item_evaluator.h>
 
 #include <fstream>
 
@@ -36,7 +36,8 @@ namespace IfcRailRoom
 			ifcopenshell::geometry::Settings settings;
 			auto mapping = ifcopenshell::geometry::impl::mapping_implementations().construct(&file, settings);
 
-			auto pwf = ifcopenshell::geometry::taxonomy::cast<ifcopenshell::geometry::taxonomy::piecewise_function>(mapping->map(curve));
+			auto fn = ifcopenshell::geometry::taxonomy::cast<ifcopenshell::geometry::taxonomy::function_item>(mapping->map(curve));
+			ifcopenshell::geometry::function_item_evaluator evaluator(settings, fn);
 
 			std::ostringstream os2;
 			os2 << "F:/IFC-Rail-Unit-Test-Reference-Code/alignment_testset/ToolboxProcessed/HorizontalAlignment/" << curve_type.c_str() << "/" << curve_type.c_str() << test_name << ".txt";
@@ -44,8 +45,6 @@ namespace IfcRailRoom
 			std::string str;
 			std::getline(ifile, str);
 			std::getline(ifile, str);
-
-			auto evaluator = ifcopenshell::geometry::piecewise_function_evaluator(pwf);
 
 			double tol = 0.001;
 			double s;
@@ -56,7 +55,6 @@ namespace IfcRailRoom
 
 				s = (curve_type == "Cubic") ? ex : es;
 				auto m = ifcopenshell::geometry::taxonomy::make<ifcopenshell::geometry::taxonomy::matrix4>(evaluator.evaluate(s));
-
 				m->components().col(3).head(3) /= mapping->get_length_unit();
 				Eigen::Matrix4d values = m->components();
 
